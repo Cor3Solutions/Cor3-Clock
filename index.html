@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grow with Cor3 - Pomodoro Tracker</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Your Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-100 p-8">
+
+    <!-- Landing Page -->
+    <div id="landingPage">
+        <div class="logo-placeholder">
+            <!-- Replace this src with your actual logo image URL -->
+            <img src="images/cor3logo.png" alt="Company Logo"
+                onerror="this.onerror=null; this.src='https://placehold.co/150x150/FFFFFF/4F46E5?text=LOGO';">
+        </div>
+        <h1 class="text-white">Umaga na pala?</h1>
+        <p class="text-white">"For the hours we didn’t know we spent."</p>
+        <button id="enterAppButton">Enter Application</button>
+    </div>
+
+    <!-- Main Application Container -->
+    <div id="mainAppContainer" class="container lg:grid-cols-2 gap-10 hidden-section">
+        <!-- Main App Logo Placeholder (subtle) -->
+        <div class="main-app-logo">
+            <img src="images/cor3logo.png" alt="Cor3 Logo"
+                onerror="this.onerror=null; this.src='https://placehold.co/40x40/4F46E5/FFFFFF?text=Logo';">
+        </div>
+
+        <!-- Left Panel: Timer Selector and Timer Sections -->
+        <div class="panel flex flex-col items-center relative">
+            <!-- Mode Switcher Buttons -->
+            <div class="absolute top-4 right-4 flex space-x-2 z-10">
+                <button id="showPomodoroButton" class="button-primary px-4 py-2 rounded-lg text-sm">Pomodoro</button>
+                <button id="showJustTimerButton" class="button-secondary px-4 py-2 rounded-lg text-sm">Just
+                    Timer</button>
+            </div>
+            <BR><BR>
+            <!-- Pomodoro Timer Section -->
+            <div id="pomodoroTimerSection" class="w-full flex flex-col items-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Pomodoro Timer</h2>
+
+                <div class="timer-status" id="pomodoroStatus">Focus Time</div>
+                <div class="timer-display" id="pomodoroDisplay">25:00</div>
+                <div class="text-gray-600 text-lg mb-6" id="pomodoroCycleCount">Cycle: 0</div>
+
+                <div class="flex space-x-2 sm:space-x-4 mb-8 sm:mb-10 flex-wrap justify-center">
+                    <button id="pomodoroStart" class="button-primary mb-2 sm:mb-0">Start</button>
+                    <button id="pomodoroPause" class="button-secondary mb-2 sm:mb-0" disabled>Pause</button>
+                    <button id="pomodoroReset" class="button-secondary" disabled>Reset</button>
+                </div>
+
+                <div class="w-full flex flex-col items-center">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Settings</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-md">
+                        <div class="flex items-center justify-center md:justify-end">
+                            <label for="pomodoroFocusInput" class="text-gray-600 mr-2">Focus:</label>
+                            <input type="number" id="pomodoroFocusInput" value="25" min="1"
+                                class="config-input border rounded-md py-2 px-3 text-gray-700">
+                            <span class="text-gray-600">min</span>
+                        </div>
+                        <div class="flex items-center justify-center md:justify-start">
+                            <label for="pomodoroBreakInput" class="text-gray-600 mr-2">Break:</label>
+                            <input type="number" id="pomodoroBreakInput" value="5" min="1"
+                                class="config-input border rounded-md py-2 px-3 text-gray-700">
+                            <span class="text-gray-600">min</span>
+                        </div>
+                    </div>
+                    <button id="applyPomodoroSettings" class="button-secondary w-full max-w-xs mt-6">Apply
+                        Settings</button>
+                </div>
+            </div>
+
+            <!-- Just Timer Section (initially hidden) -->
+            <div id="justTimerSection" class="w-full flex-col items-center hidden-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Just Timer</h2>
+
+                <div class="timer-status" id="justTimerStatus">Ready</div>
+                <div class="timer-display" id="justTimerDisplay">00:00</div>
+
+                <div class="flex space-x-2 sm:space-x-4 mb-8 sm:mb-10 flex-wrap justify-center">
+                    <button id="justTimerStart" class="button-primary mb-2 sm:mb-0">Start</button>
+                    <button id="justTimerPause" class="button-secondary mb-2 sm:mb-0" disabled>Pause</button>
+                    <button id="justTimerStop" class="button-danger mb-2 sm:mb-0" disabled>Stop</button>
+                    <button id="justTimerReset" class="button-secondary" disabled>Reset</button>
+                </div>
+
+                <div class="w-full flex flex-col items-center">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Settings</h3>
+                    <div class="flex items-center flex-wrap justify-center">
+                        <label for="justTimerInitialInput"
+                            class="text-gray-600 w-full sm:w-auto text-center sm:text-left mb-2 sm:mb-0">Initial Time
+                            (min):</label>
+                        <input type="number" id="justTimerInitialInput" value="0" min="0"
+                            class="config-input border rounded-md py-2 px-3 text-gray-700">
+                    </div>
+                    <button id="applyJustTimerSettings" class="button-secondary w-full max-w-xs mt-6">Apply
+                        Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Worklog & Daily Summary -->
+        <div class="panel flex flex-col">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Worklog & Summary</h2>
+
+            <!-- Date Filter and Show All Logs -->
+            <div
+                class="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0 sm:space-x-4">
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                    <label for="logDateFilter" class="text-gray-600 text-sm font-medium">View Date:</label>
+                    <input type="date" id="logDateFilter" class="border rounded-md py-2 px-3 text-gray-700 flex-grow">
+                </div>
+                <button id="showAllLogsButton" class="button-secondary px-4 py-2 text-sm w-full sm:w-auto">Show All
+                    Logs</button>
+            </div>
+
+            <!-- Worklog Display -->
+            <div class="mb-8 flex-grow">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4" id="worklogTitle">Today's Worklog</h3>
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden overflow-x-auto">
+                    <table class="min-w-full log-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Task</th>
+                                <th>Duration</th>
+                                <th>Category</th>
+                            </tr>
+                        </thead>
+                        <tbody id="worklogTableBody">
+                            <!-- Worklog entries will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                    <p id="noWorklogMessage" class="text-gray-500 text-center p-4 hidden">No tasks logged for this day
+                        yet.</p>
+                </div>
+            </div>
+
+            <!-- Selected Day Summary -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4" id="selectedDaySummaryTitle">Today's Summary</h3>
+                <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+                    <div class="daily-summary-item">
+                        <span>Focused Time:</span>
+                        <span id="totalFocusTimeToday">0 minutes</span>
+                    </div>
+                    <div class="daily-summary-item">
+                        <span>Break Time:</span>
+                        <span id="totalBreakTimeToday">0 minutes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overall Summary (New Section) -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Overall Summary</h3>
+                <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+                    <div class="daily-summary-item">
+                        <span>Total Focused Time (All Days):</span>
+                        <span id="totalFocusTimeOverall">0 minutes</span>
+                    </div>
+                    <div class="daily-summary-item">
+                        <span>Total Break Time (All Days):</span>
+                        <span id="totalBreakTimeOverall">0 minutes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export and Clear Log Buttons -->
+            <div class="mt-auto flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button id="exportCsvButton" class="button-secondary">Export to CSV</button>
+                <button id="clearLogButton" class="button-danger">Clear All Logs</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="col-span-full text-center text-gray-500 text-sm mt-8 py-4">
+            Cor3 Solutions 2025
+        </footer>
+    </div>
+
+    <!-- Worklog Input Modal -->
+    <div id="worklogModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Session Ended!</h3>
+            <p class="text-gray-600 mb-4">What did you work on during the last session?</p>
+            <div class="mb-4">
+                <label for="taskDescription" class="block text-gray-700 text-sm font-bold mb-2">Task
+                    Description:</label>
+                <textarea id="taskDescription" rows="3"
+                    class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="e.g., Implemented Pomodoro timer logic"></textarea>
+            </div>
+            <div class="mb-6">
+                <label for="taskCategory" class="block text-gray-700 text-sm font-bold mb-2">Category/Tag
+                    (Optional):</label>
+                <input type="text" id="taskCategory" list="categoryOptions"
+                    class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="e.g., Coding, Reading, Task Management">
+                <datalist id="categoryOptions"></datalist>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 mt-4">
+                <button id="saveWorklogButton" class="button-primary">Save Log</button>
+                <button id="skipWorklogButton" class="button-secondary">Skip</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM Elements ---
+        // Landing Page Elements
+        const landingPage = document.getElementById('landingPage');
+        const enterAppButton = document.getElementById('enterAppButton');
+        const mainAppContainer = document.getElementById('mainAppContainer');
+
+        // Timer Mode Switcher
+        const showPomodoroButton = document.getElementById('showPomodoroButton');
+        const showJustTimerButton = document.getElementById('showJustTimerButton');
+        const pomodoroTimerSection = document.getElementById('pomodoroTimerSection');
+        const justTimerSection = document.getElementById('justTimerSection');
+
+        // Pomodoro Timer Elements
+        const pomodoroDisplay = document.getElementById('pomodoroDisplay');
+        const pomodoroStatus = document.getElementById('pomodoroStatus');
+        const pomodoroStartButton = document.getElementById('pomodoroStart');
+        const pomodoroPauseButton = document.getElementById('pomodoroPause');
+        const pomodoroResetButton = document.getElementById('pomodoroReset');
+        const pomodoroFocusInput = document.getElementById('pomodoroFocusInput');
+        const pomodoroBreakInput = document.getElementById('pomodoroBreakInput');
+        const applyPomodoroSettingsButton = document.getElementById('applyPomodoroSettings');
+        const pomodoroCycleCountDisplay = document.getElementById('pomodoroCycleCount');
+
+        // Just Timer Elements
+        const justTimerDisplay = document.getElementById('justTimerDisplay');
+        const justTimerStatus = document.getElementById('justTimerStatus');
+        const justTimerStartButton = document.getElementById('justTimerStart');
+        const justTimerPauseButton = document.getElementById('justTimerPause');
+        const justTimerStopButton = document.getElementById('justTimerStop');
+        const justTimerResetButton = document.getElementById('justTimerReset');
+        const justTimerInitialInput = document.getElementById('justTimerInitialInput');
+        const applyJustTimerSettingsButton = document.getElementById('applyJustTimerSettings');
+
+        // Worklog & Summary Elements
+        const logDateFilter = document.getElementById('logDateFilter'); // New: Date filter input
+        const showAllLogsButton = document.getElementById('showAllLogsButton'); // New: Show all logs button
+        const worklogTitle = document.getElementById('worklogTitle'); // New: Worklog title
+        const selectedDaySummaryTitle = document.getElementById('selectedDaySummaryTitle'); // New: Selected Day Summary title
+        const worklogTableBody = document.getElementById('worklogTableBody');
+        const noWorklogMessage = document.getElementById('noWorklogMessage');
+        const totalFocusTimeTodayDisplay = document.getElementById('totalFocusTimeToday'); // Renamed for clarity
+        const totalBreakTimeTodayDisplay = document.getElementById('totalBreakTimeToday'); // Renamed for clarity
+        const totalFocusTimeOverallDisplay = document.getElementById('totalFocusTimeOverall'); // New: Overall Focus Time
+        const totalBreakTimeOverallDisplay = document.getElementById('totalBreakTimeOverall'); // New: Overall Break Time
+        const clearLogButton = document.getElementById('clearLogButton');
+        const exportCsvButton = document.getElementById('exportCsvButton');
+
+        // Worklog Modal Elements
+        const worklogModal = document.getElementById('worklogModal');
+        const taskDescriptionInput = document.getElementById('taskDescription');
+        const taskCategoryInput = document.getElementById('taskCategory');
+        const saveWorklogButton = document.getElementById('saveWorklogButton');
+        const skipWorklogButton = document.getElementById('skipWorklogButton');
+        const categoryOptionsDatalist = document.getElementById('categoryOptions');
+
+        // --- Timer State Variables ---
+        let currentMode = 'pomodoro'; // 'pomodoro' or 'justTimer'
+
+        // Pomodoro State
+        let pomodoroFocusTime = parseInt(pomodoroFocusInput.value) * 60; // seconds
+        let pomodoroBreakTime = parseInt(pomodoroBreakInput.value) * 60; // seconds
+        let pomodoroCurrentTime = pomodoroFocusTime;
+        let pomodoroIsPaused = true;
+        let pomodoroIsWorking = true; // true for focus, false for break
+        let pomodoroIntervalId = null;
+        let pomodoroSessionStartTime = null;
+        let pomodoroCycle = 0; // Pomodoro Cycle Counter
+
+        // Just Timer State
+        let justTimerInitialTime = parseInt(justTimerInitialInput.value) * 60; // seconds
+        let justTimerCurrentTime = justTimerInitialTime;
+        let justTimerIsPaused = true;
+        let justTimerIntervalId = null;
+        let justTimerSessionStartTime = null; // For tracking elapsed time if counting up
+
+        // Global variables for modal context
+        let currentSessionDuration = 0;
+        let modalInitiator = null; // 'pomodoro' or 'justTimer'
+
+        // Worklog Data
+        let worklogs = []; // Array to store { timestamp, task, duration, category, type: 'focus' | 'break' }
+        let categories = []; // Array to store unique categories
+
+        // Audio for alerts
+        const bellSound = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-01.mp3'); // Example sound
+
+        // --- Utility Functions ---
+
+        /**
+         * Formats time in seconds into MM:SS string.
+         * @param {number} seconds - The time in seconds.
+         * @returns {string} Formatted time string (MM:SS).
+         */
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        }
+
+        /**
+         * Plays a sound alert.
+         */
+        function playSound() {
+            bellSound.play().catch(e => console.error("Error playing sound:", e));
+        }
+
+        /**
+         * Requests notification permission from the user.
+         */
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                console.warn("This browser does not support desktop notification");
+                return;
+            }
+
+            if (Notification.permission === "default") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        console.log("Notification permission granted.");
+                    } else {
+                        console.warn("Notification permission denied.");
+                    }
+                });
+            }
+        }
+
+        /**
+         * Sends a desktop notification.
+         * @param {string} title - The title of the notification.
+         * @param {string} body - The body text of the notification.
+         */
+        function sendNotification(title, body) {
+            if (Notification.permission === "granted" && document.hidden) {
+                new Notification(title, {
+                    body: body,
+                    icon: 'images/cor3logo.png' // Use your logo as notification icon
+                });
+            }
+        }
+
+        /**
+         * Updates the display for the active timer mode.
+         */
+        function updateActiveDisplay() {
+            if (currentMode === 'pomodoro') {
+                pomodoroDisplay.textContent = formatTime(pomodoroCurrentTime);
+                document.title = `${formatTime(pomodoroCurrentTime)} - ${pomodoroIsWorking ? 'Focus' : 'Break'} Time`;
+                pomodoroCycleCountDisplay.textContent = `Cycle: ${pomodoroCycle}`; // Update cycle display
+            } else { // justTimer
+                justTimerDisplay.textContent = formatTime(justTimerCurrentTime);
+                document.title = `${formatTime(justTimerCurrentTime)} - Just Timer`;
+            }
+        }
+
+        // --- Landing Page Functions ---
+        function showLandingPage() {
+            landingPage.classList.remove('hidden');
+            mainAppContainer.classList.add('hidden-section');
+            mainAppContainer.style.display = 'none';
+        }
+
+        function hideLandingPage() {
+            landingPage.classList.add('hidden');
+            mainAppContainer.classList.remove('hidden-section');
+            mainAppContainer.style.display = 'grid'; // Ensure it's displayed as grid
+            switchMode('pomodoro'); // Set initial mode when app is entered
+            requestNotificationPermission(); // Request permission when entering the app
+        }
+
+        // --- Mode Switching Logic ---
+
+        /**
+         * Switches the active timer mode and updates the UI.
+         * @param {string} mode - 'pomodoro' or 'justTimer'.
+         */
+        function switchMode(mode) {
+            // Stop and reset current active timer before switching
+            if (currentMode === 'pomodoro' && pomodoroIntervalId) {
+                pomodoroResetTimer();
+            } else if (currentMode === 'justTimer' && justTimerIntervalId) {
+                justTimerResetTimer();
+            }
+
+            currentMode = mode;
+
+            // Update button styles and section visibility
+            if (currentMode === 'pomodoro') {
+                showPomodoroButton.classList.add('button-primary');
+                showPomodoroButton.classList.remove('button-secondary');
+                showJustTimerButton.classList.add('button-secondary');
+                showJustTimerButton.classList.remove('button-primary');
+
+                pomodoroTimerSection.classList.remove('hidden-section');
+                pomodoroTimerSection.style.display = 'flex'; // Explicitly set display
+                justTimerSection.classList.add('hidden-section');
+                justTimerSection.style.display = 'none'; // Explicitly set display
+            } else { // justTimer
+                showJustTimerButton.classList.add('button-primary');
+                showJustTimerButton.classList.remove('button-secondary');
+                showPomodoroButton.classList.add('button-secondary');
+                showPomodoroButton.classList.remove('button-primary');
+
+                justTimerSection.classList.remove('hidden-section');
+                justTimerSection.style.display = 'flex'; // Explicitly set display
+                pomodoroTimerSection.classList.add('hidden-section');
+                pomodoroTimerSection.style.display = 'none'; // Explicitly set display
+            }
+            updateActiveDisplay(); // Update display for the newly active mode
+        }
+
+        // --- Pomodoro Timer Functions ---
+
+        /**
+         * Starts or resumes the Pomodoro timer.
+         */
+        function pomodoroStartTimer() {
+            if (!pomodoroIsPaused) return;
+            pomodoroIsPaused = false;
+            pomodoroStartButton.disabled = true;
+            pomodoroPauseButton.disabled = false;
+            pomodoroResetButton.disabled = false;
+            pomodoroFocusInput.disabled = true;
+            pomodoroBreakInput.disabled = true;
+            applyPomodoroSettingsButton.disabled = true;
+
+            if (!pomodoroSessionStartTime) {
+                pomodoroSessionStartTime = new Date().getTime();
+            }
+
+            pomodoroIntervalId = setInterval(() => {
+                pomodoroCurrentTime--;
+                updateActiveDisplay();
+
+                if (pomodoroCurrentTime <= 0) {
+                    clearInterval(pomodoroIntervalId);
+                    playSound();
+
+                    const sessionDurationSeconds = (new Date().getTime() - pomodoroSessionStartTime) / 1000;
+                    const sessionDurationMinutes = Math.round(sessionDurationSeconds / 60);
+
+                    if (pomodoroIsWorking) {
+                        sendNotification("Pomodoro Session Ended!", "Time for a break!");
+                        pomodoroCycle++; // Increment cycle when focus session ends
+                        showWorklogModal(sessionDurationMinutes, 'pomodoro'); // Pass initiator
+                    } else {
+                        sendNotification("Break Ended!", "Time to focus again!");
+                        addWorklog('Break', '', sessionDurationMinutes, 'break');
+                        pomodoroToggleMode();
+                        pomodoroStartTimer();
+                    }
+                }
+            }, 1000);
+        }
+
+        /**
+         * Pauses the Pomodoro timer.
+         */
+        function pomodoroPauseTimer() {
+            if (pomodoroIsPaused) return;
+            pomodoroIsPaused = true;
+            clearInterval(pomodoroIntervalId);
+            pomodoroStartButton.disabled = false;
+            pomodoroPauseButton.disabled = true;
+            pomodoroFocusInput.disabled = false;
+            pomodoroBreakInput.disabled = false;
+            applyPomodoroSettingsButton.disabled = false;
+        }
+
+        /**
+         * Resets the Pomodoro timer.
+         */
+        function pomodoroResetTimer() {
+            clearInterval(pomodoroIntervalId);
+            pomodoroIsPaused = true;
+            pomodoroIsWorking = true;
+            pomodoroCurrentTime = pomodoroFocusTime;
+            pomodoroSessionStartTime = null;
+            pomodoroCycle = 0; // Reset cycle count
+            updateActiveDisplay();
+            pomodoroStatus.textContent = 'Focus Time';
+            pomodoroStartButton.disabled = false;
+            pomodoroPauseButton.disabled = true;
+            pomodoroResetButton.disabled = true;
+            pomodoroFocusInput.disabled = false;
+            pomodoroBreakInput.disabled = false;
+            applyPomodoroSettingsButton.disabled = false;
+        }
+
+        /**
+         * Toggles between Pomodoro focus and break modes.
+         */
+        function pomodoroToggleMode() {
+            pomodoroIsWorking = !pomodoroIsWorking;
+            pomodoroCurrentTime = pomodoroIsWorking ? pomodoroFocusTime : pomodoroBreakTime;
+            pomodoroSessionStartTime = new Date().getTime();
+            pomodoroStatus.textContent = pomodoroIsWorking ? 'Focus Time' : 'Break Time';
+            updateActiveDisplay();
+        }
+
+        // --- Just Timer Functions ---
+
+        /**
+         * Starts or resumes the Just Timer.
+         */
+        function justTimerStartTimer() {
+            if (!justTimerIsPaused) return;
+            justTimerIsPaused = true; // Set to true to ensure it starts from a stopped state
+            clearInterval(justTimerIntervalId); // Clear any existing interval
+
+            justTimerStartButton.disabled = true;
+            justTimerPauseButton.disabled = false;
+            justTimerStopButton.disabled = false; // Enable Stop button
+            justTimerResetButton.disabled = false; // Enable Reset button
+            justTimerInitialInput.disabled = true;
+            applyJustTimerSettingsButton.disabled = true;
+
+            // If starting from 00:00 (stopwatch mode), set session start time
+            if (justTimerInitialTime === 0 && justTimerCurrentTime === 0) {
+                justTimerSessionStartTime = new Date().getTime();
+            } else if (justTimerSessionStartTime === null) {
+                // If resuming a countdown or starting a new countdown
+                justTimerSessionStartTime = new Date().getTime() - (justTimerInitialTime - justTimerCurrentTime) * 1000;
+            }
+
+            justTimerIsPaused = false; // Now set to false as it's running
+
+            justTimerIntervalId = setInterval(() => {
+                if (justTimerInitialTime > 0) { // Countdown timer
+                    justTimerCurrentTime--;
+                    if (justTimerCurrentTime <= 0) {
+                        clearInterval(justTimerIntervalId);
+                        playSound();
+                        sendNotification("Just Timer Ended!", "Your timer has reached zero.");
+                        const sessionDurationMinutes = justTimerInitialTime / 60; // Duration is the initial time set
+                        showWorklogModal(sessionDurationMinutes, 'justTimer'); // Pass initiator
+                        justTimerStatus.textContent = 'Time Up!';
+                        justTimerResetButton.disabled = false;
+                        justTimerStartButton.disabled = true;
+                        justTimerPauseButton.disabled = true;
+                        justTimerStopButton.disabled = true; // Disable Stop after time up
+                    }
+                } else { // Stopwatch (counts up)
+                    justTimerCurrentTime++;
+                }
+                updateActiveDisplay();
+            }, 1000);
+            justTimerStatus.textContent = 'Running';
+        }
+
+        /**
+         * Pauses the Just Timer.
+         */
+        function justTimerPauseTimer() {
+            if (justTimerIsPaused) return;
+            justTimerIsPaused = true;
+            clearInterval(justTimerIntervalId);
+
+            justTimerStartButton.disabled = false;
+            justTimerPauseButton.disabled = true;
+            justTimerStopButton.disabled = false; // Keep Stop enabled after pause
+            justTimerInitialInput.disabled = false;
+            applyJustTimerSettingsButton.disabled = false;
+            justTimerStatus.textContent = 'Paused';
+        }
+
+        /**
+         * Stops the Just Timer and prompts for worklog.
+         */
+        function justTimerStopTimer() {
+            clearInterval(justTimerIntervalId);
+            justTimerIsPaused = true;
+
+            let elapsedMinutes = 0;
+            if (justTimerSessionStartTime !== null) {
+                const elapsedSeconds = Math.round((new Date().getTime() - justTimerSessionStartTime) / 1000);
+                elapsedMinutes = Math.round(elapsedSeconds / 60);
+            }
+
+            // Always show modal when Stop is clicked
+            showWorklogModal(elapsedMinutes, 'justTimer');
+
+            // Reset timer state after stopping, regardless of modal action
+            justTimerSessionStartTime = null;
+            justTimerCurrentTime = justTimerInitialTime;
+            updateActiveDisplay();
+            justTimerStatus.textContent = 'Stopped';
+            justTimerStartButton.disabled = false;
+            justTimerPauseButton.disabled = true;
+            justTimerStopButton.disabled = true;
+            justTimerResetButton.disabled = true;
+            justTimerInitialInput.disabled = false;
+            applyJustTimerSettingsButton.disabled = false;
+        }
+
+        /**
+         * Resets the Just Timer.
+         */
+        function justTimerResetTimer() {
+            clearInterval(justTimerIntervalId);
+            justTimerIsPaused = true;
+            justTimerCurrentTime = justTimerInitialTime; // Reset to initial configured time
+            justTimerSessionStartTime = null; // Clear session start time
+            updateActiveDisplay();
+            justTimerStatus.textContent = 'Ready';
+            justTimerStartButton.disabled = false;
+            justTimerPauseButton.disabled = true;
+            justTimerStopButton.disabled = true; // Disable Stop on reset
+            justTimerResetButton.disabled = true;
+            justTimerInitialInput.disabled = false;
+            applyJustTimerSettingsButton.disabled = false;
+        }
+
+        // --- Worklog Functions ---
+
+        /**
+         * Loads worklogs from localStorage.
+         */
+        function loadWorklogs() {
+            const storedWorklogs = localStorage.getItem('pomodoroWorklogs');
+            if (storedWorklogs) {
+                worklogs = JSON.parse(storedWorklogs);
+            }
+            renderWorklogs(); // Render all logs by default or filtered by today
+            updateSummaries(); // Update both daily and overall summaries
+        }
+
+        /**
+         * Saves worklogs to localStorage.
+         */
+        function saveWorklogs() {
+            localStorage.setItem('pomodoroWorklogs', JSON.stringify(worklogs));
+        }
+
+        /**
+         * Adds a new worklog entry.
+         * @param {string} task - Description of the task.
+         * @param {string} category - Optional category/tag.
+         * @param {number} duration - Duration of the session in minutes.
+         * @param {string} type - 'focus', 'break', or 'justTimer'.
+         */
+        function addWorklog(task, category, duration, type = 'focus') {
+            const now = new Date();
+            worklogs.push({
+                timestamp: now.toISOString(),
+                task: task || (type === 'break' ? 'Break' : (type === 'justTimer' ? 'Just Timer Session' : 'No task recorded')),
+                duration: duration,
+                category: category || '',
+                type: type
+            });
+            saveWorklogs();
+
+            // Add new category if it doesn't exist
+            if (category && !categories.includes(category)) {
+                categories.push(category);
+                categories.sort(); // Keep categories sorted alphabetically
+                saveCategories();
+                renderCategoryOptions(); // Re-render datalist options
+            }
+
+            renderWorklogs(logDateFilter.value); // Re-render worklogs for the currently selected date
+            updateSummaries(logDateFilter.value); // Re-calculate summaries for the currently selected date
+        }
+
+        /**
+         * Renders the worklogs based on an optional date filter.
+         * @param {string|null} dateFilter - Date string (YYYY-MM-DD) to filter logs, or null to show all.
+         */
+        function renderWorklogs(dateFilter = null) {
+            worklogTableBody.innerHTML = ''; // Clear existing entries
+            let filteredWorklogs = worklogs;
+            let titleText = "All Worklogs";
+            let noLogsMessage = "No tasks logged yet.";
+
+            if (dateFilter) {
+                const selectedDate = new Date(dateFilter).toDateString();
+                filteredWorklogs = worklogs.filter(log => new Date(log.timestamp).toDateString() === selectedDate);
+                titleText = `Worklog for ${new Date(dateFilter).toLocaleDateString()}`;
+                noLogsMessage = `No tasks logged for ${new Date(dateFilter).toLocaleDateString()} yet.`;
+            }
+
+            worklogTitle.textContent = titleText;
+            noWorklogMessage.textContent = noLogsMessage;
+
+            if (filteredWorklogs.length === 0) {
+                noWorklogMessage.classList.remove('hidden');
+                return;
+            } else {
+                noWorklogMessage.classList.add('hidden');
+            }
+
+            filteredWorklogs.forEach(log => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                    <td>${log.task}</td>
+                    <td>${log.duration} min</td>
+                    <td>${log.category || '-'}</td>
+                `;
+                worklogTableBody.appendChild(row);
+            });
+        }
+
+        /**
+         * Calculates and displays summaries (selected day and overall).
+         * @param {string|null} dateFilter - Date string (YYYY-MM-DD) for selected day summary, or null for current day.
+         */
+        function updateSummaries(dateFilter = null) {
+            let totalFocusToday = 0;
+            let totalBreakToday = 0;
+            let totalFocusOverall = 0;
+            let totalBreakOverall = 0;
+
+            const targetDate = dateFilter ? new Date(dateFilter).toDateString() : new Date().toDateString();
+            const summaryTitle = dateFilter ? `Summary for ${new Date(dateFilter).toLocaleDateString()}` : "Today's Summary";
+            selectedDaySummaryTitle.textContent = summaryTitle;
+
+            worklogs.forEach(log => {
+                const logDate = new Date(log.timestamp).toDateString();
+
+                // Calculate selected day summary
+                if (logDate === targetDate) {
+                    if (log.type === 'focus' || log.type === 'justTimer') {
+                        totalFocusToday += log.duration;
+                    } else if (log.type === 'break') {
+                        totalBreakToday += log.duration;
+                    }
+                }
+
+                // Calculate overall summary
+                if (log.type === 'focus' || log.type === 'justTimer') {
+                    totalFocusOverall += log.duration;
+                } else if (log.type === 'break') {
+                    totalBreakOverall += log.duration;
+                }
+            });
+
+            totalFocusTimeTodayDisplay.textContent = `${totalFocusToday} minutes`;
+            totalBreakTimeTodayDisplay.textContent = `${totalBreakToday} minutes`;
+            totalFocusTimeOverallDisplay.textContent = `${totalFocusOverall} minutes`;
+            totalBreakTimeOverallDisplay.textContent = `${totalBreakOverall} minutes`;
+        }
+
+
+        /**
+         * Clears all worklogs from localStorage and the display.
+         */
+        function clearAllLogs() {
+            if (window.confirm("Are you sure you want to clear ALL worklogs? This action cannot be undone.")) {
+                worklogs = [];
+                categories = []; // Also clear categories
+                saveWorklogs();
+                saveCategories(); // Save cleared categories
+                renderWorklogs(logDateFilter.value); // Re-render for current filter
+                updateSummaries(logDateFilter.value); // Re-calculate summaries
+                renderCategoryOptions(); // Re-render datalist
+            }
+        }
+
+        // --- Category Management Functions ---
+
+        /**
+         * Loads categories from localStorage.
+         */
+        function loadCategories() {
+            const storedCategories = localStorage.getItem('pomodoroCategories');
+            if (storedCategories) {
+                categories = JSON.parse(storedCategories);
+            }
+            renderCategoryOptions();
+        }
+
+        /**
+         * Saves categories to localStorage.
+         */
+        function saveCategories() {
+            localStorage.setItem('pomodoroCategories', JSON.stringify(categories));
+        }
+
+        /**
+         * Renders options in the category datalist.
+         */
+        function renderCategoryOptions() {
+            categoryOptionsDatalist.innerHTML = ''; // Clear existing options
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                categoryOptionsDatalist.appendChild(option);
+            });
+        }
+
+        // --- Export to CSV Function ---
+        /**
+         * Exports the current worklogs to a CSV file.
+         */
+        function exportWorklogToCSV() {
+            if (worklogs.length === 0) {
+                window.alert("No worklogs to export!");
+                return;
+            }
+
+            const headers = ["Date", "Time", "Task", "Duration (minutes)", "Category", "Session Type"];
+            const csvRows = [];
+            csvRows.push(headers.join(',')); // Add headers to the CSV
+
+            worklogs.forEach(log => {
+                const logDate = new Date(log.timestamp);
+                const timePart = logDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const datePart = logDate.toLocaleDateString();
+                const row = [
+                    `"${datePart}"`,
+                    `"${timePart}"`,
+                    `"${log.task.replace(/"/g, '""')}"`, // Escape double quotes
+                    log.duration,
+                    `"${log.category.replace(/"/g, '""')}"`, // Escape double quotes
+                    `"${log.type}"`
+                ];
+                csvRows.push(row.join(','));
+            });
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `pomodoro_worklog_${new Date().toISOString().slice(0, 10)}.csv`; // Filename with current date
+            link.click();
+            URL.revokeObjectURL(link.href); // Clean up the URL object
+        }
+
+        // --- Worklog Modal Functions ---
+
+        /**
+         * Shows the worklog input modal.
+         * @param {number} duration - The duration of the completed session in minutes.
+         * @param {string} initiatorType - 'pomodoro' or 'justTimer'.
+         */
+        function showWorklogModal(duration, initiatorType) {
+            currentSessionDuration = duration;
+            modalInitiator = initiatorType; // Set the initiator
+            taskDescriptionInput.value = ''; // Clear previous input
+            taskCategoryInput.value = ''; // Clear previous input
+            worklogModal.classList.add('show');
+            taskDescriptionInput.focus(); // Focus on the description input
+        }
+
+        /**
+         * Hides the worklog input modal.
+         */
+        function hideWorklogModal() {
+            worklogModal.classList.remove('show');
+        }
+
+        // --- Event Listeners ---
+
+        // Landing Page Button
+        enterAppButton.addEventListener('click', hideLandingPage);
+
+        // Mode Switcher Buttons
+        showPomodoroButton.addEventListener('click', () => switchMode('pomodoro'));
+        showJustTimerButton.addEventListener('click', () => switchMode('justTimer'));
+
+        // Pomodoro Timer Buttons
+        pomodoroStartButton.addEventListener('click', pomodoroStartTimer);
+        pomodoroPauseButton.addEventListener('click', pomodoroPauseTimer);
+        pomodoroResetButton.addEventListener('click', pomodoroResetTimer);
+
+        applyPomodoroSettingsButton.addEventListener('click', () => {
+            const newFocusTime = parseInt(pomodoroFocusInput.value);
+            const newBreakTime = parseInt(pomodoroBreakInput.value);
+
+            if (isNaN(newFocusTime) || newFocusTime <= 0 || isNaN(newBreakTime) || newBreakTime <= 0) {
+                window.alert("Please enter valid positive numbers for focus and break times.");
+                return;
+            }
+
+            pomodoroFocusTime = newFocusTime * 60;
+            pomodoroBreakTime = newBreakTime * 60;
+            if (pomodoroIsWorking) {
+                pomodoroCurrentTime = pomodoroFocusTime;
+            } else {
+                pomodoroCurrentTime = pomodoroBreakTime;
+            }
+            updateActiveDisplay();
+            window.alert("Pomodoro settings applied successfully!");
+        });
+
+        // Just Timer Buttons
+        justTimerStartButton.addEventListener('click', justTimerStartTimer);
+        justTimerPauseButton.addEventListener('click', justTimerPauseTimer);
+        justTimerStopButton.addEventListener('click', justTimerStopTimer);
+        justTimerResetButton.addEventListener('click', justTimerResetTimer);
+
+        applyJustTimerSettingsButton.addEventListener('click', () => {
+            const newInitialTime = parseInt(justTimerInitialInput.value);
+
+            if (isNaN(newInitialTime) || newInitialTime < 0) {
+                window.alert("Please enter a valid non-negative number for initial time.");
+                return;
+            }
+
+            justTimerInitialTime = newInitialTime * 60;
+            justTimerCurrentTime = justTimerInitialTime;
+            updateActiveDisplay();
+            window.alert("Just Timer settings applied successfully!");
+        });
+
+
+        // Worklog Modal Buttons
+        saveWorklogButton.addEventListener('click', () => {
+            const task = taskDescriptionInput.value.trim();
+            const category = taskCategoryInput.value.trim();
+            addWorklog(task, category, currentSessionDuration, modalInitiator === 'pomodoro' ? 'focus' : 'justTimer');
+            hideWorklogModal();
+
+            if (modalInitiator === 'pomodoro') {
+                // If Pomodoro, toggle mode and start next session (break or focus)
+                pomodoroToggleMode();
+                pomodoroStartTimer();
+            } else if (modalInitiator === 'justTimer') {
+                // If Just Timer, reset it after logging
+                justTimerResetTimer();
+            }
+        });
+
+        skipWorklogButton.addEventListener('click', () => {
+            addWorklog('No task recorded', '', currentSessionDuration, modalInitiator === 'pomodoro' ? 'focus' : 'justTimer');
+            hideWorklogModal();
+
+            if (modalInitiator === 'pomodoro') {
+                // If Pomodoro, toggle mode and start next session (break or focus)
+                pomodoroToggleMode();
+                pomodoroStartTimer();
+            } else if (modalInitiator === 'justTimer') {
+                // If Just Timer, reset it after logging
+                justTimerResetTimer();
+            }
+        });
+
+        // Date Filter and Show All Logs Buttons
+        logDateFilter.addEventListener('change', (event) => {
+            renderWorklogs(event.target.value);
+            updateSummaries(event.target.value);
+        });
+
+        showAllLogsButton.addEventListener('click', () => {
+            logDateFilter.value = ''; // Clear the date filter input
+            renderWorklogs(null); // Render all logs
+            updateSummaries(null); // Update summaries for all logs (overall)
+        });
+
+        // Global Worklog & Export Buttons
+        clearLogButton.addEventListener('click', clearAllLogs);
+        exportCsvButton.addEventListener('click', exportWorklogToCSV);
+
+        // Initial load
+        window.onload = () => {
+            // Initialize both timers' displays
+            pomodoroDisplay.textContent = formatTime(pomodoroFocusTime);
+            justTimerDisplay.textContent = formatTime(justTimerInitialTime);
+
+            // Set the date filter to today's date by default
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const dd = String(today.getDate()).padStart(2, '0');
+            const todayString = `${yyyy}-${mm}-${dd}`;
+            logDateFilter.value = todayString;
+
+            loadWorklogs(); // This will call renderWorklogs and updateSummaries with today's date initially
+
+            // Set initial button states for Pomodoro
+            pomodoroResetButton.disabled = true;
+            pomodoroPauseButton.disabled = true;
+
+            // Set initial button states for Just Timer
+            justTimerResetButton.disabled = true;
+            justTimerPauseButton.disabled = true;
+            justTimerStopButton.disabled = true; // Disable Stop button initially
+
+            // Show landing page first
+            showLandingPage();
+        };
+    </script>
+</body>
+
+</html>

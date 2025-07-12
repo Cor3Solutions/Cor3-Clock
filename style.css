@@ -1,0 +1,499 @@
+/* Custom styles for the app */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f0f2f5;
+  /* Light gray background */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  /* Align to top to prevent content overflow */
+  min-height: 100vh;
+  /* Responsive padding for the body */
+  padding: 1rem;
+  /* Default padding for small screens */
+  box-sizing: border-box;
+  /* Background image styles for the entire app */
+  background-image: url("images/try.png");
+  /* Updated background image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* Keeps background fixed when scrolling */
+}
+
+@media (min-width: 768px) {
+  /* Medium screens and up */
+  body {
+    padding: 2rem;
+    /* More padding for larger screens */
+  }
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  /* Rounded corners */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  /* Softer shadow */
+  padding: 1.5rem;
+  /* Responsive padding for container */
+  display: grid;
+  gap: 1.5rem;
+  /* Responsive gap */
+  grid-template-columns: 1fr;
+  /* Default to single column */
+}
+
+@media (min-width: 1024px) {
+  /* Large screens */
+  .container {
+    padding: 2.5rem;
+    /* More padding for large screens */
+    gap: 2.5rem;
+    /* More gap for large screens */
+    grid-template-columns: 1fr 1fr;
+    /* Two columns */
+  }
+}
+
+.panel {
+  background-color: #fcfcfc;
+  /* Very light panel background */
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  /* Responsive padding for panels */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  /* Softer inner shadow */
+}
+
+@media (min-width: 768px) {
+  .panel {
+    padding: 2rem;
+    /* More padding for larger screens */
+  }
+}
+
+.button-primary {
+  background-color: #4f46e5;
+  /* Indigo */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.button-primary:hover {
+  background-color: #4338ca;
+  /* Darker indigo */
+  transform: translateY(-1px);
+}
+
+.button-secondary {
+  background-color: #eef2ff;
+  /* Lighter indigo */
+  color: #4f46e5;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.button-secondary:hover {
+  background-color: #dbeafe;
+  /* Even lighter indigo */
+  transform: translateY(-1px);
+}
+
+.button-danger {
+  background-color: #ef4444;
+  /* Red */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.button-danger:hover {
+  background-color: #dc2626;
+  /* Darker red */
+  transform: translateY(-1px);
+}
+
+input[type="text"],
+textarea,
+input[type="number"] {
+  border: 1px solid #e2e8f0;
+  /* Lighter gray border */
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+input[type="number"]:focus {
+  border-color: #6366f1;
+  /* Indigo focus */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  /* Softer focus shadow */
+  outline: none;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Slightly lighter overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 1.5rem;
+  /* Responsive modal padding */
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  /* Softer modal shadow */
+  transform: translateY(-20px);
+  transition: transform 0.3s ease-in-out;
+}
+
+@media (min-width: 640px) {
+  .modal-content {
+    padding: 2.5rem;
+    /* More padding for larger screens */
+  }
+}
+
+.modal.show .modal-content {
+  transform: translateY(0);
+}
+
+.log-table th,
+.log-table td {
+  padding: 0.75rem 0.5rem;
+  /* Reduced horizontal padding for mobile */
+  border-bottom: 1px solid #f1f5f9;
+  /* Even lighter gray border */
+  text-align: left;
+  font-size: 0.875rem;
+  /* Smaller font for table content on mobile */
+}
+
+@media (min-width: 640px) {
+  .log-table th,
+  .log-table td {
+    padding: 0.75rem 1rem;
+    /* Standard padding for larger screens */
+    font-size: 1rem;
+    /* Standard font size */
+  }
+}
+
+.log-table th {
+  background-color: #f8fafc;
+  /* Lighter header background */
+  font-weight: 600;
+  color: #64748b;
+  /* Slightly lighter gray text */
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.log-table tr:last-child td {
+  border-bottom: none;
+}
+
+.log-table tbody tr:hover {
+  background-color: #fcfcfc;
+  /* Subtle hover effect */
+}
+
+.timer-display {
+  font-size: 3.5rem;
+  /* Smaller font for timer on mobile */
+  font-weight: 700;
+  color: #2c3e50;
+  /* Darker gray for better contrast */
+  margin-bottom: 1.5rem;
+  /* Reduced margin */
+  text-align: center;
+  letter-spacing: -0.05em;
+  /* Slightly tighter letter spacing */
+}
+
+@media (min-width: 640px) {
+  .timer-display {
+    font-size: 4.5rem;
+    /* Standard font for larger screens */
+    margin-bottom: 2rem;
+  }
+}
+
+.timer-status {
+  font-size: 1.25rem;
+  /* Smaller status text on mobile */
+  font-weight: 500;
+  color: #718096;
+  /* Medium gray */
+  text-align: center;
+  margin-bottom: 1rem;
+  /* Reduced margin */
+}
+
+@media (min-width: 640px) {
+  .timer-status {
+    font-size: 1.6rem;
+    /* Standard status text for larger screens */
+    margin-bottom: 1.5rem;
+  }
+}
+
+.config-input {
+  width: 70px;
+  /* Slightly smaller width for config inputs on mobile */
+  text-align: center;
+  margin: 0 0.5rem;
+  /* Reduced margin */
+}
+
+@media (min-width: 640px) {
+  .config-input {
+    width: 90px;
+    /* Standard width for larger screens */
+    margin: 0 0.75rem;
+  }
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.daily-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.daily-summary-item:last-child {
+  border-bottom: none;
+}
+
+.daily-summary-item span:first-child {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.daily-summary-item span:last-child {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Styles for showing/hiding sections */
+.hidden-section {
+  display: none;
+}
+
+/* Landing Page Specific Styles */
+#landingPage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  /* Semi-transparent white background */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  /* Above everything else */
+  text-align: center;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+  background-image: url("images/try.png");
+  /* Updated landing page background */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  /* Text color for landing page */
+}
+
+#landingPage.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#landingPage .logo-placeholder {
+  width: 120px;
+  /* Smaller logo on mobile */
+  height: 120px;
+  background-color: rgba(255, 255, 255, 0.2);
+  /* Semi-transparent white circle */
+  border-radius: 50%;
+  /* Circular logo placeholder */
+  margin-bottom: 1.5rem;
+  /* Reduced margin */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  /* Ensure image stays within bounds */
+}
+
+@media (min-width: 640px) {
+  #landingPage .logo-placeholder {
+    width: 150px;
+    /* Standard size for larger screens */
+    height: 150px;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+  }
+}
+
+#landingPage .logo-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Cover the placeholder area */
+}
+
+#landingPage h1 {
+  font-size: 3rem;
+  /* Smaller title on mobile */
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  /* Stronger shadow */
+}
+
+@media (min-width: 640px) {
+  #landingPage h1 {
+    font-size: 4.5rem;
+    /* Standard title for larger screens */
+    margin-bottom: 1rem;
+  }
+}
+
+#landingPage p {
+  font-size: 1.4rem;
+  /* Smaller tagline on mobile */
+  font-weight: 500;
+  margin-bottom: 2rem;
+  /* Reduced margin */
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 640px) {
+  #landingPage p {
+    font-size: 2rem;
+    /* Standard tagline for larger screens */
+    margin-bottom: 3rem;
+  }
+}
+
+#landingPage button {
+  background-color: #ffffff;
+  /* White button */
+  color: #4f46e5;
+  /* Indigo text */
+  padding: 1rem 2rem;
+  /* Smaller padding on mobile */
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  /* Smaller font on mobile */
+  font-weight: 700;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  /* Stronger shadow */
+  transition: all 0.3s ease-in-out;
+}
+
+@media (min-width: 640px) {
+  #landingPage button {
+    padding: 1.2rem 3rem;
+    /* Standard padding for larger screens */
+    font-size: 1.4rem;
+    /* Standard font for larger screens */
+  }
+}
+
+#landingPage button:hover {
+  background-color: #e0e7ff;
+  /* Light indigo on hover */
+  transform: translateY(-4px);
+  /* More pronounced lift */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Main App Logo Placeholder */
+.main-app-logo {
+  position: absolute;
+  top: 1rem;
+  /* Adjusted top for mobile */
+  left: 1rem;
+  /* Adjusted left for mobile */
+  width: 30px;
+  /* Smaller logo on mobile */
+  height: 30px;
+  /* Smaller logo on mobile */
+  border-radius: 50%;
+  /* If your logo is circular */
+  overflow: hidden;
+  /* Ensure image fits */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow for the logo */
+}
+
+@media (min-width: 640px) {
+  .main-app-logo {
+    top: 1.5rem;
+    /* Standard top for larger screens */
+    left: 2rem;
+    /* Standard left for larger screens */
+    width: 40px;
+    /* Standard size for larger screens */
+    height: 40px;
+    /* Standard size for larger screens */
+  }
+}
+
+.main-app-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Ensures the image covers the area without distortion */
+}
